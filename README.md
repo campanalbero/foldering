@@ -2,7 +2,9 @@ foldering
 =========
 
 # 使い方
-ruby このプログラム名 from-folder to-folder
+
+```ruby このプログラム名 from-folder to-folder```
+
 で、
 from-folder 内にある写真等を、
 to-folder の下に yyyy/mm/dd/
@@ -28,7 +30,9 @@ from と to を同じフォルダにすると、無限ループするかも（�
 一緒に旅行に行った人が、同じメーカーのカメラを使っていて、その写真を1箇所にまとめるなどの用途には向いていません。
 
 # 移動できるファイルについて 
-targets = [".jpg", ".avi", ".mp4", ".mov", ".nef", ".cr2"]
+
+```targets = [".jpg", ".avi", ".mp4", ".mov", ".nef", ".cr2"]```
+
 で指定しているように、画像やら動画やら、ニコンとキヤノンの raw 画像も移動できるようにしています。
 raw ファイルのメタデータは ExifTool で読み取っているだけなので、読めるかどうかは ExifTool 次第です。
 
