@@ -35,7 +35,8 @@ Dir.glob([directorize(ARGV[0]) + '**/*']) do |f|
 		log.debug(f + " is not image nor movie")
 		next
 	end
-	timestump = Exif.get_date(f)
+	exif = Exif.new(f)
+	timestump = exif.get_date
 	new_dir = directorize(ARGV[1]) + yyyymmdd(timestump)
 	dst = new_dir + "/" + File.basename(f)
 	FileUtils::mkdir_p(new_dir) unless FileTest.exist?(new_dir)

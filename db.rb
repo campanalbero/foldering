@@ -10,12 +10,14 @@ module Db
 	def insert_into_db(path)
 		photo_db = DBI.connect('DBI:SQLite3:photo.db')
 		begin
+			exif = Exif.new(path)
+
 			digest = Digest::MD5.file(path).to_s
-			date = Exif.get_date(path).to_s
-			model = Exif.get_model(path)
+			date = exif.get_date.to_s
+			model = exif.get_model
 			photo_db.do(Photo_sql, path, digest, date, model)
 
-			#if Exif.image?(path) then
+			#if exif.image? then
 		 	#	# TODO insert queue
 			#end
 		rescue => e
