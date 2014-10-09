@@ -6,13 +6,10 @@ foldering
 
 # 使い方
 
-```ruby create_table.rb```
+tmp フォルダ以下に処理したいファイル群を適当に置きます。
 
-で photo.db という sqlite3 の db を作成します。
-
-```ruby main.rb FROM_DIR TO_DIR```
+```ruby sort.rb```
 
 で、
-FROM_DIR 内にある写真等を、
-TO_DIR の下に yyyy/mm/dd/
-というフォルダを作って、そこに移動します。
+tmp 以下にある写真等を、
+photo 以下に yyyy/mm/dd/ というフォルダを作って移動します。
