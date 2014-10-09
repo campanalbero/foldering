@@ -1,36 +1,37 @@
-require 'logger'
-require 'dbi'
 require 'digest/md5'
+require 'logger'
 require 'mini_exiftool'
+require 'pathname'
+require 'sequel'
+
+$log = Logger.new('batch.log')
 
 module Db
-	Log = Logger.new("err.log")
-	Photo_db = DBI.connect('DBI:SQLite3:photo/photo.db')
-	def insert_into_db(path)
+	def insert_into_db(relative_path)
 		begin
-			photo_sql = "insert into photo(path, md5, date_time_original, model) values (? ,?, ?, ?)"
-			exif = Exif.new(path)
-			digest = Digest::MD5.file(path).to_s
+			exif = Exif.new(relative_path)
+			digest = Digest::MD5.file(relative_path).to_s
 			date = exif.get_date.to_s
 			model = exif.get_model
 
-			Photo_db.do(photo_sql, path, digest, date, model)
+			dir = 'photo/'
+			db = Sequel.sqlite(dir + 'photo.db')
+			relative_path_from_dir = Pathname.new(relative_path).relative_path_from(Pathname.new(dir))
+			db[:photo].insert(:path => relative_path_from_dir.to_s, :md5 => digest, :date_time_original => date, :model => model)
 		rescue => e
-	 		Log.error(__method__.to_s + ", " + path + ", " + e.message)
-	 	ensure
-		#	Photo_db.disconnect
+	 		$log.error(__method__.to_s + ", " + File.expand_path(relative_path) + ", " + e.message)
 		end
 	end
 
-	Queue_db = DBI.connect('DBI:SQLite3:resized/queue.db')
-	def insert_into_queue(path)
+	# 異動したファイルをキューに積んで、別プログラムで何かしら処理をする
+	def insert_into_queue(relative_path)
 		begin
-			queue_sql = "insert into queue(path) values (?)"
-			Queue_db.do(queue_sql, path)
+			dir = 'resized/'
+			queue = Sequel.sqlite(dir + 'queue.db')
+			relative_path_from_dir = Pathname.new(relative_path).relative_path_from(Pathname.new(dir))
+			queue[:queue].insert(:path => relative_path_from_dir.to_s)
 		rescue => e
-	 		Log.error(__method__.to_s + ", " + path + ", " + e.message)
-	 	ensure
-		#	Queue_db.disconnect
+	 		$log.error(__method__.to_s + ", " + File.expand_path(relative_path) + ", " + e.message)
 		end
 	end
 
@@ -106,12 +107,11 @@ def yyyymmdd(timestump)
 	yyyy + "/" + mm + "/" + dd
 end
 
-log = Logger.new("err.log")
-log.level = Logger::INFO
 puts("from, to")
+# photo/ フォルダ以下に決め打ち
+# tmp/ フォルダ以下に決め打ち
 Dir.glob(['tmp/**/*']) do |f|
 	if not Exif.target?(f) then
-		#log.error(f + " is not image nor movie")
 		next
 	end
 	exif = Exif.new(f)
@@ -125,6 +125,6 @@ Dir.glob(['tmp/**/*']) do |f|
 		Db.insert_into_db(dst)
 		Db.insert_into_queue(dst)
 	else
-		log.error(f + " already exist")
+		$log.error(f + " already exist")
 	end
 end
