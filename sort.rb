@@ -1,10 +1,10 @@
-require 'digest/md5'
-require 'logger'
-require 'mini_exiftool'
-require 'pathname'
-require 'sequel'
+require "digest/md5"
+require "logger"
+require "mini_exiftool"
+require "pathname"
+require "sequel"
 
-$log = Logger.new('batch.log')
+$log = Logger.new("batch.log")
 
 module Db
 	def insert_into_db(relative_path)
@@ -14,8 +14,8 @@ module Db
 			date = exif.get_date.to_s
 			model = exif.get_model
 
-			dir = 'photo/'
-			db = Sequel.sqlite(dir + 'photo.db')
+			dir = "photo/"
+			db = Sequel.sqlite(dir + "photo.db")
 			relative_path_from_dir = Pathname.new(relative_path).relative_path_from(Pathname.new(dir))
 			db[:photo].insert(:path => relative_path_from_dir.to_s, :md5 => digest, :date_time_original => date, :model => model)
 		rescue => e
@@ -26,8 +26,8 @@ module Db
 	# 異動したファイルをキューに積んで、別プログラムで何かしら処理をする
 	def insert_into_queue(relative_path)
 		begin
-			dir = 'resized/'
-			queue = Sequel.sqlite(dir + 'queue.db')
+			dir = "resized/"
+			queue = Sequel.sqlite(dir + "queue.db")
 			relative_path_from_dir = Pathname.new(relative_path).relative_path_from(Pathname.new(dir))
 			queue[:queue].insert(:path => relative_path_from_dir.to_s)
 		rescue => e
@@ -92,7 +92,7 @@ end
 
 # 引数(path)の末尾が / になったものを返す
 def directorize(path)
-	if path.end_with?('/') then
+	if path.end_with?("/") then
 		path
 	else
 		path + "/"
@@ -101,16 +101,16 @@ end
 
 # 引数のタイムスタンプから yyyy/mm/dd という文字列を返す
 def yyyymmdd(timestump)	
-	yyyy = timestump.strftime('%Y')
-	mm = timestump.strftime('%m')
-	dd = timestump.strftime('%d')
+	yyyy = timestump.strftime("%Y")
+	mm = timestump.strftime("%m")
+	dd = timestump.strftime("%d")
 	yyyy + "/" + mm + "/" + dd
 end
 
 puts("from, to")
 # photo/ フォルダ以下に決め打ち
 # tmp/ フォルダ以下に決め打ち
-Dir.glob(['tmp/**/*']) do |f|
+Dir.glob(["tmp/**/*"]) do |f|
 	if not Exif.target?(f) then
 		next
 	end
