@@ -11,6 +11,7 @@ Process.setrlimit(Process::RLIMIT_NOFILE, 4096, 65536)
 module Db
 	def insert_into_db(entity)
 		begin
+			db = Sequel.sqlite("photo/photo.db")
 			db[:photo].insert(:path => entity.path, :md5 => entity.md5, :date_time_original => entity.date, :model => entity.model)
 		rescue => e
 	 		$log.error(__method__.to_s + ", " + File.expand_path(entity.path) + ", " + e.message)
