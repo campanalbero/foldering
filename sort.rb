@@ -6,9 +6,14 @@ require "sequel"
 
 $log = Logger.new("batch.log")
 
-Process.setrlimit(Process::RLIMIT_NOFILE, 4096, 65536)
+# ROOT/tmp/FOLDER/IMAGE_FILE
+# ROOT/photo/photo.db
+# ROOT/photo/yyyy-mm-dd/FILE_NAME.EXT
+# ROOT/resized/queue.db
+# ROOT/resized/yyyy-mm-dd/FILE_NAME.EXT.jpg
 
 module Db
+	@@queue_dir = "resized/"
 	def insert_into_db(entity)
 		begin
 			db = Sequel.sqlite("photo/photo.db")
@@ -18,12 +23,12 @@ module Db
 		end
 	end
 
-	# 異動したファイルをキューに積んで、別プログラムで何かしら処理をする
+	# split this
+	# 移動したファイルをキューに積んで、別プログラムで何かしら処理をする
 	def insert_into_queue(relative_path)
 		begin
-			dir = "resized/"
-			queue = Sequel.sqlite(dir + "queue.db")
-			relative_path_from_dir = Pathname.new(relative_path).relative_path_from(Pathname.new(dir))
+			queue = Sequel.sqlite(@@queue_dir + "queue.db")
+			relative_path_from_dir = Pathname.new(relative_path).relative_path_from(Pathname.new(@@queue_dir))
 			queue[:queue].insert(:path => relative_path_from_dir.to_s)
 		rescue => e
 	 		$log.error(__method__.to_s + ", " + File.expand_path(relative_path) + ", " + e.message)
@@ -35,12 +40,12 @@ module Db
 end
 
 class Entity
-	# 引数のタイムスタンプから yyyy/mm/dd という文字列を返す
+	# 引数のタイムスタンプから yyyy-mm-dd という文字列を返す
 	def yyyymmdd(timestump)	
 		yyyy = timestump.strftime("%Y")
 		mm = timestump.strftime("%m")
 		dd = timestump.strftime("%d")
-		yyyy + "/" + mm + "/" + dd
+		yyyy + "-" + mm + "-" + dd
 	end
 
 	# 作成日を得る
@@ -71,28 +76,28 @@ class Entity
 		end
 	end
 
-    def initialize(current_path)
-         exif = MiniExiftool.new(current_path)
-         @md5 = Digest::MD5.file(current_path).to_s
-         @date = get_date(exif)
-         @model = get_model(exif)
-         @path = yyyymmdd(@date) + "/" + File.basename(current_path)
-     end
+	def initialize(current_path)
+		exif = MiniMediatool.new(current_path)
+		@md5 = Digest::MD5.file(current_path).to_s
+		@date = get_date(exif)
+		@model = get_model(exif)
+		@path = yyyymmdd(@date) + "/" + File.basename(current_path)
+	end
 
-     attr_reader :path
-     attr_reader :md5
-     attr_reader :date
-     attr_reader :model
+	attr_reader :path #change it, is this current path or future one?
+	attr_reader :md5
+	attr_reader :date
+	attr_reader :model
 end
 
-class Exif
-	def self.image?(path)
+class Media
+	private def self.image?(path)
 		extension = File.extname(path).downcase
 		targets = [".jpg", ".nef", ".cr2"]
 		targets.include?(extension)
 	end
 
-	def self.movie?(path)
+	private def self.movie?(path)
 		extension = File.extname(path).downcase
 		targets = [".avi", ".mp4", ".mov"]
 		targets.include?(extension)
@@ -103,20 +108,11 @@ class Exif
 	end
 end
 
-# 引数(path)の末尾が / になったものを返す
-def directorize(path)
-	if path.end_with?("/") then
-		path
-	else
-		path + "/"
-	end
-end
-
 puts("from, to")
 # photo/ フォルダ以下に決め打ち
 # tmp/ フォルダ以下に決め打ち
 Dir.glob(["tmp/**/*"]) do |f|
-	if not Exif.target?(f) then
+	if not Media.target?(f) then
 		next
 	end
 	entity = Entity.new(f)
@@ -132,3 +128,4 @@ Dir.glob(["tmp/**/*"]) do |f|
 		$log.error(f + " already exist")
 	end
 end
+
