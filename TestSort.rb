@@ -13,11 +13,19 @@ class TestSort < MiniTest::Unit::TestCase
 	end
 
 	def test_jpg_image?
-		assert_equal true, Media.image?("image.jpg")
+		assert_equal true, Media.image?("IMG_20150101_000000.jpg")
 	end
 
 	def test_JPG_image?
 		assert_equal true, Media.image?("IMAGE.JPG")
+	end
+
+	def test_CR2_image?
+		assert_equal true, Media.image?("IMG_9999.CR2")
+	end
+
+	def test_NEF_image?
+		assert_equal true, Media.image?("DSC_0000.NEF")
 	end
 
 	def test_txt_image?
