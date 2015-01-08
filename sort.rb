@@ -77,7 +77,7 @@ class Entity
 	end
 
 	def initialize(current_path)
-		exif = MiniMediatool.new(current_path)
+		exif = MiniExiftool.new(current_path)
 		@md5 = Digest::MD5.file(current_path).to_s
 		@date = get_date(exif)
 		@model = get_model(exif)
@@ -91,13 +91,13 @@ class Entity
 end
 
 class Media
-	private def self.image?(path)
+	def self.image?(path)
 		extension = File.extname(path).downcase
 		targets = [".jpg", ".nef", ".cr2"]
 		targets.include?(extension)
 	end
 
-	private def self.movie?(path)
+	def self.movie?(path)
 		extension = File.extname(path).downcase
 		targets = [".avi", ".mp4", ".mov"]
 		targets.include?(extension)
