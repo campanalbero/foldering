@@ -1,9 +1,9 @@
 require 'minitest/unit'
-require './sort'
+require './app/sort.rb'
 
 MiniTest::Unit.autorun
 
-class TestSort < MiniTest::Unit::TestCase
+class TestDao < MiniTest::Unit::TestCase
 	def setup
 		# do something
 		# flush dir
@@ -14,15 +14,15 @@ class TestSort < MiniTest::Unit::TestCase
 		# do something
 	end
 
-	def test_move
-		day = Time.now
-		File.rename('tmp', 'tmp' + day.year.to_s + day.month.to_s + day.day.to_s + day.hour.to_s + day.min.to_s + day.sec.to_s)
+#	def test_move
+#		day = Time.now
+#		File.rename('tmp', 'tmp' + day.year.to_s + day.month.to_s + day.day.to_s + day.hour.to_s + day.min.to_s + day.sec.to_s)
 		#FileUtils.rm_rf('tmp')
-		File.rename('photo', 'tmp')
-		assert_equal false, File.exist?('photo')
-		system('ruby sort.rb')
-		assert_equal true, File.exist?('photo')
-	end
+#		File.rename('photo', 'tmp')
+#		assert_equal false, File.exist?('photo')
+#		system('ruby sort.rb')
+#		assert_equal true, File.exist?('photo')
+#	end
 
 	def test_jpg_image?
 		assert_equal true, Media.image?("IMG_20150101_000000.jpg")
