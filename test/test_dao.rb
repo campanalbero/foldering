@@ -1,5 +1,5 @@
 require 'minitest/unit'
-require './app/sort.rb'
+require './sort.rb'
 
 MiniTest::Unit.autorun
 
