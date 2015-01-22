@@ -15,18 +15,19 @@ Dir.glob(["tmp/**/*"]) do |f|
 		next
 	end
 	entity = MediaEntity.new(f)
-	FileUtils::mkdir_p(File::dirname(entity.future_path))
-	dst = "photo/" + entity.future_path
-	if (FileTest.exist?(entity.future_path))
+	src = File.expand_path(f)
+	dst = File.expand_path("photo/" + entity.future_path)
+	if (FileTest.exist?(dst))
 		if (Db.exist?(entity.md5))
 			$log.error(f + " is duplicated.")
-			File.delete(f)
+			File.delete(src)
 		else
-			$log.info(f + " already exist, but they are different.")
+			$log.info(src + " already exist, but they are different.")
 		end
 	else
-		puts(File.expand_path(f) + ", " + File.expand_path(dst))
-		File.rename(f, dst)
+		puts(src + ", " + dst)
+		FileUtils::mkdir_p(File::dirname(dst))
+		File.rename(src, dst)
 		Db.insert(entity)
 		# TODO 移動先にファイルがあるけど DB に保存されていない場合
 	end
