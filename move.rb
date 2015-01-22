@@ -34,13 +34,4 @@ end
 
 RemoveDust::remove_ds_store()
 RemoveDust::remove_empty_dir()
-## Only for *nix
-#system('find tmp -name .DS_Store | xargs rm')
-#
-#sorted = Dir.glob(["tmp/**/*"]).sort{|a,b| b.split('/').length <=> a.split('/').length
-#}
-#sorted.each{|f|
-#	puts f
-#	Dir.rmdir(f) if File::ftype(f) == "directory" and Dir.entries(f).size == 2
-#}
-#
+
