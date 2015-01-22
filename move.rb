@@ -3,7 +3,7 @@ require "./app/dao.rb"
 require "./app/MediaEntity.rb"
 require "./app/RemoveDust.rb"
 
-batch_log = "log/batch.log"
+batch_log = "log/move.log"
 File.rename(batch_log, "log/" + DateTime.now.to_s + ".log") if FileTest.exist?(batch_log)
 $log = Logger.new(batch_log)
 
