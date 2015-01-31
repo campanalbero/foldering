@@ -9,11 +9,9 @@ foldering
 
 # 使い方
 
-実行プログラムが複数あります（複数のエントリポイントがあります）。
-
 tmp フォルダ以下に処理したいファイル群を適当に置きます。
 
-```ruby move.rb```
+```ruby foldering move```
 
 tmp 以下にある写真等を、
 photo 以下に yyyy-mm-dd というフォルダを作って移動します。
@@ -23,7 +21,7 @@ photo 以下に yyyy-mm-dd というフォルダを作って移動します。
 .DS_Store, thumb.db などの os が排出するゴミファイルは削除します。
 空になったフォルダは削除します。
 
-```ruby resize.rb```
+```ruby foldering resize```
 
 移動後の写真を対象に 2048x2048 以下にリサイズしつつ jpg にしたものを thumb/yyyy-mm-dd/FILE_NAME.CR2.jpg などの名前で保存します。
 このネーミングの理由は、　xxx.NEF, xxx.CR2 が存在したとき対策です。
@@ -33,7 +31,7 @@ photo 以下に yyyy-mm-dd というフォルダを作って移動します。
 log/move.log に移動ログを書き出します。
 log/resize.log にリサイズログを書き出します。
 
-```ruby validate.rb```
+```ruby foldering validate```
 
 db に保存されているハッシュ値と現在のファイルのハッシュ値を比較して、 db に保存したタイミングからファイルに変化がないかを確かめます。
 
