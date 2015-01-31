@@ -1,4 +1,4 @@
-class RemoveDust
+class Deleter
 
 	# Only for *nix
 	def self.remove_ds_store()

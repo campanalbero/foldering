@@ -1,7 +1,6 @@
 require "digest/md5"
 require "logger"
 require "mini_exiftool"
-#require "pathname"
 require "sequel"
 require "date"
 
@@ -9,7 +8,7 @@ batch_log = "log/batch.log"
 File.rename(batch_log, "log/" + DateTime.now.to_s + ".log") if FileTest.exist?(batch_log)
 $log = Logger.new(batch_log)
 
-module Db
+module Dao
 	def insert(entity)
 		begin
 			db = Sequel.sqlite('photo/photo.db')

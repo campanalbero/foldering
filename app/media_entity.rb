@@ -1,6 +1,5 @@
 require "digest/md5"
 require "mini_exiftool"
-#require "pathname"
 require "date"
 
 class MediaEntity
