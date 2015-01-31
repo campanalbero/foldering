@@ -1,13 +1,7 @@
-require "logger"
 require 'RMagick'
 require './app/media_entity.rb'
 
-batch_log = "log/resize.log"
-File.rename(batch_log, "log/" + DateTime.now.to_s + ".log") if FileTest.exist?(batch_log)
-$log = Logger.new(batch_log)
-
 module Resizer
-	
 	def resize(from, to)
 		puts from + ", " + to 
 		image = Magick::Image.read(from).first
@@ -29,7 +23,7 @@ module Resizer
 				FileUtils::mkdir_p(File::dirname(dst))
 				resize(f, dst)
 			else
-				$log.info(f + " already exist")
+				$logger.info(f + " already exist")
 			end
 		end
 	end
