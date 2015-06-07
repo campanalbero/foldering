@@ -30,6 +30,8 @@ class MediaEntity
 			exif["Model-jpn"]
 		elsif exif.filename.include?("MAH0")
 			"DSC-HX5V"
+		elsif exif.filename.include?("DSCN")
+			"COOLPIX S32"
 		elsif exif.filename.include?("video-")
 			"GT-S5660"
 		elsif exif.filename.include?("VID_") || exif.filename.include?("PANO_")
