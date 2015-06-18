@@ -10,4 +10,8 @@ sudo gem install sequel
 sudo gem install mini_exiftool
 sudo gem install rmagick
 sudo gem install sqlite3
+sudo gem install ruby-mysql
 
+# brew install exiftool
+# brew install pkg-config
+# brew link pkg-config

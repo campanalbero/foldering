@@ -3,12 +3,12 @@ require "mini_exiftool"
 require "date"
 
 class MediaEntity
-	# 引数のタイムスタンプから yyyy-mm-dd という文字列を返す
-	def yyyymmdd(timestump)	
+	# 引数のタイムスタンプから yyyy/mm/dd という文字列を返す
+	def yyyymmdd(timestump)
 		yyyy = timestump.strftime("%Y")
 		mm = timestump.strftime("%m")
 		dd = timestump.strftime("%d")
-		yyyy + "-" + mm + "-" + dd
+		yyyy + "/" + mm + "/" + dd
 	end
 
 	# 作成日を得る
