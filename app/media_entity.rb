@@ -58,7 +58,7 @@ class MediaEntity
 
 	def self.movie?(path)
 		extension = File.extname(path).downcase
-		targets = [".avi", ".mp4", ".mov"]
+		targets = [".avi", ".mp4", ".mov", ".m2ts"]
 		targets.include?(extension)
 	end
 
