@@ -15,8 +15,10 @@ class MediaEntity
 	def get_date(exif)
 		if exif.MediaModifyDate != nil
 			exif.MediaModifyDate
-		elsif exif.DateTimeOriginal != nil
-			exif.DateTimeOriginal
+		elsif exif.DateTimeOriginal != nil && exif.DateTimeOriginal.to_s.include?('-')
+  		DateTime.strptime(exif.DateTimeOriginal.to_s, '%Y-%m-%d %H:%M:%S')
+	  elsif exif.DateTimeOriginal != nil
+  		exif.DateTimeOriginal
 		else
 			exif.FileModifyDate
 		end
