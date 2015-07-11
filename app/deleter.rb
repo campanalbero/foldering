@@ -5,6 +5,10 @@ class Deleter
 		system('find tmp -name .DS_Store | xargs rm')
 	end
 
+	def self.remove_ini()
+		system('find tmp -name .picasa.ini | xargs rm')
+	end
+
 	def self.remove_empty_dir()
 		sorted = Dir.glob(["tmp/**/*"]).sort{|a,b| b.split('/').length <=> a.split('/').length}
 		sorted.each{|f|

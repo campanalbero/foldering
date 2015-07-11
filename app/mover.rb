@@ -37,6 +37,7 @@ module Mover
 			end
 		end
 
+		Deleter::remove_ini()
 		Deleter::remove_ds_store()
 		Deleter::remove_empty_dir()
 	end
