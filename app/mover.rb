@@ -15,25 +15,26 @@ module Mover
 			entity = MediaEntity.new(f)
 			src = File.expand_path(f)
 			dst = File.expand_path("photo/" + entity.future_path)
-			if (FileTest.exist?(dst))
-				if (Dao.exist?(entity.md5))
-					$logger.error(f + " is duplicated.")
-					#File.delete(src)
-				else
-					$log.info(src + " already exist, but they are different.")
-				end
-			else
-				puts(src + ", " + dst)
+			if not FileTest.exist?(dst) then
 				begin
 					Dao.insert(entity)
 					FileUtils::mkdir_p(File::dirname(dst))
 					File.rename(src, dst)
-					# TODO 移動先にファイルがあるけど DB に保存されていない場合
+					puts(src + ", " + dst)
+					$logger.info(src + ", " + dst)
 				rescue
 					dup = File.expand_path("duplicated/" + entity.current_path)
 					FileUtils::mkdir_p(File::dirname(dup))
 					File.rename(src, dup)
+					puts(entity.current_path + " is duplicated.")
+					$logger.error(entity.current_path + " is duplicated.")
 				end
+			else
+				dup = File.expand_path("same_name/" + entity.current_path)
+				FileUtils::mkdir_p(File::dirname(dup))
+				File.rename(src, dup)
+				puts(src + " already exist.")
+				$log.error(src + " already exist.")
 			end
 		end
 

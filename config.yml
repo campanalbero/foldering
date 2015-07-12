@@ -3,7 +3,7 @@ src_path: tmp/
 dst_path: photo/
 
 db_schema: photo
-db_url: localhost
+db_url: 192.168.103.10
 db_port: 3306
-db_user: user
-db_password: password
+db_user: kazuaki
+db_password: suzuki
