@@ -1,0 +1,11 @@
+package 'exiftool'
+package 'imagemagick'
+package 'ufraw'
+package 'ruby-mysql'
+package 'libmagickwand-dev'
+package 'ruby-dev'
+
+gem_package 'sequel'
+gem_package 'mini_exiftool'
+gem_package 'rmagick' 
+gem_package 'ruby-mysql'
