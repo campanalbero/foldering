@@ -22,13 +22,15 @@ module Mover
 			entity = MediaEntity.new(f)
 			src = File.expand_path(f)
 			dst = File.expand_path("photo/" + entity.future_path)
-  		begin
+			begin
 				Dao.insert(entity)
 				FileUtils::mkdir_p(File::dirname(dst))
 				File.rename(src, dst)
 				puts(src + ", " + dst)
 				$logger.info(src + ", " + dst)
-      rescue Sequel::UniqueConstraintViolation => e
+			rescue Sequel::UniqueConstraintViolation => e
+				# TODO compare by binary
+				# TODO compare with entity.date
 				move("duplicated/", src)
 				p e
 				$logger.error e
