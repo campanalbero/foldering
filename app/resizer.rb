@@ -1,4 +1,4 @@
-require 'RMagick'
+require 'rmagick'
 require './app/media_entity.rb'
 
 module Resizer
