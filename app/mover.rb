@@ -31,7 +31,7 @@ module Mover
 			rescue Sequel::UniqueConstraintViolation => e
 				# TODO compare by binary
 				# TODO compare with entity.date
-				move("duplicated/", src)
+				move("duplicated/", entity.future_path)
 				p e
 				$logger.error e
 			rescue => e
