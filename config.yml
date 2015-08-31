@@ -1,6 +1,4 @@
-log_path: log/
-src_path: tmp/
-dst_path: photo/
+project_root_dir: ~/repository/foldering
 
 db_schema: photo
 db_url: 192.168.103.10

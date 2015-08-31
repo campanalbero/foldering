@@ -12,7 +12,7 @@ module Mover
 	end
 
 	def move_all
-		puts("from, to")
+		$logger.info("from, to")
 		# photo/ フォルダ以下に決め打ち
 		# tmp/ フォルダ以下に決め打ち
 		Dir.glob(["tmp/**/*"]) do |f|
