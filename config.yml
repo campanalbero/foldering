@@ -5,3 +5,6 @@ db_url: 192.168.103.10
 db_port: 3306
 db_user: kazuaki
 db_password: suzuki
+
+log_level: 1 
+
