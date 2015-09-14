@@ -1,12 +1,20 @@
-class Deleter
+require 'find'
 
-	# Only for *nix
+class Deleter
+	def self.remove(file_name)
+		Find.find('tmp'){|f|
+			if f.include?(file_name)
+				File.delete(f)
+			end
+		}
+	end
+
 	def self.remove_ds_store()
-		system('find tmp -name .DS_Store | xargs rm')
+		self.remove('.DS_Store')
 	end
 
 	def self.remove_ini()
-		system('find tmp -name .picasa.ini | xargs rm')
+		self.remove('.picasa.ini')
 	end
 
 	def self.remove_empty_dir()
